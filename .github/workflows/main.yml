@@ -27,9 +27,12 @@ jobs:
     - name: Publish
       run: dotnet publish --configuration Release
     - run: ls ${{ github.workspace }}/hello-world-demo/bin/Release/net6.0/publish/
-    - name: image name and tag
+    - name: Image Name and Tag
       run: echo "image-name=hello-world-demo:${GITHUB_SHA}"
       id: image
-    - name: docker build
-      run: |
-        docker build -t ${{ steps.image.outputs.image-name }} .
+    - name: Docker Build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: ${{ steps.image.outputs.image-name }}

@@ -51,6 +51,7 @@ jobs:
         token: ${{ secrets.GH_PAT }}
     - name: Update Manifest Image Tag
       run: |
+        ls -l
         cd deployment-manifest-demo
         kustomize edit set image ${{ steps.image.outputs.image-name }}
         git config user.name motmot84

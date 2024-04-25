@@ -31,13 +31,11 @@ jobs:
       run: echo "image-name=hello-world-demo:$GITHUB_SHA"
       id: image
     - name: Docker Build
-      run: |
-        docker build -t hello-world-demo:$GITHUB_SHA
-      # uses: docker/build-push-action@v5
-      # with:
-      #   context: .
-      #   push: false
-      #   tags: ${{ steps.image.outputs.image-name }}
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: hello-world-demo:$GITHUB_SHA
     - name: Download Kustomize
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin

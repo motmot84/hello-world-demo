@@ -31,11 +31,13 @@ jobs:
       run: echo "image-name=hello-world-demo:${GITHUB_SHA}"
       id: image
     - name: Docker Build
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: false
-        tags: ${{ steps.image.outputs.image-name }}
+      run: |
+        docker build -t hello-world-demo:${GITHUB_SHA}
+      # uses: docker/build-push-action@v5
+      # with:
+      #   context: .
+      #   push: false
+      #   tags: ${{ steps.image.outputs.image-name }}
     - name: Download Kustomize
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin
@@ -53,7 +55,7 @@ jobs:
       run: |
         ls -l
         cd hello-world-demo/env/test
-        kustomize edit set image ${{ steps.image.outputs.image-name }}
+        kustomize edit set image hello-world-demo:${GITHUB_SHA}
         git config user.name motmot84
         git config user.email motmot84@yahoo.com
         git add .

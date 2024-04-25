@@ -36,3 +36,22 @@ jobs:
         context: .
         push: false
         tags: ${{ steps.image.outputs.image-name }}
+    - name: Download Kustomize
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/kustomize
+        curl - o $GITHUB_WORKSPACE/kustomize -l "${{ secrets.KUSTOMIZE_DOWNLOAD_URL }}"
+        chmod u+x $GITHUB_WORKSPACE/kustomize
+    - name: Check out manifest
+      uses: actions/checkout@v3
+      with:
+        repository: motmot84/deployment-manifest-demo
+        ref: main
+        token: ${{ secrets.GH_PAT }}
+    - name: Update Manifest Image Tag
+      run: |
+        cd deployment-manifest-demo
+        kustomize edit set image ${{ steps.image.outputs.image-name }}
+        git config user.name motmot84
+        git config user.email motmot84@yahoo.com
+        git add .
+        git diff-index --quiet HEAD || git commit --me

@@ -36,7 +36,7 @@ jobs:
         context: .
         push: false
         repository: hello-world-demo
-        tags: $GITHUB_SHA
+        tags: ${{ github.sha }}
     - name: Download Kustomize
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin
@@ -54,7 +54,7 @@ jobs:
       run: |
         ls -l
         cd hello-world-demo/env/test
-        kustomize edit set image hello-world-demo:$GITHUB_SHA
+        kustomize edit set image hello-world-demo:${{ github.sha }}
         git config user.name motmot84
         git config user.email motmot84@yahoo.com
         git add .

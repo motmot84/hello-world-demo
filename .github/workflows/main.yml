@@ -52,7 +52,7 @@ jobs:
     - name: Update Manifest Image Tag
       run: |
         ls -l
-        cd deployment-manifest-demo
+        cd hello-world-demo/env/test
         kustomize edit set image ${{ steps.image.outputs.image-name }}
         git config user.name motmot84
         git config user.email motmot84@yahoo.com

@@ -35,7 +35,8 @@ jobs:
       with:
         context: .
         push: false
-        tags: hello-world-demo:$GITHUB_SHA
+        repository: hello-world-demo
+        tags: $GITHUB_SHA
     - name: Download Kustomize
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin

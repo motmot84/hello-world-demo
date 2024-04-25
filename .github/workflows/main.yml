@@ -39,7 +39,7 @@ jobs:
     - name: Download Kustomize
       run: |
         mkdir -p $GITHUB_WORKSPACE/kustomize
-        curl - o $GITHUB_WORKSPACE/kustomize -l "${{ secrets.KUSTOMIZE_DOWNLOAD_URL }}"
+        curl -o $GITHUB_WORKSPACE/kustomize -l "${{ secrets.KUSTOMIZE_DOWNLOAD_URL }}"
         chmod u+x $GITHUB_WORKSPACE/kustomize
     - name: Check out manifest
       uses: actions/checkout@v3

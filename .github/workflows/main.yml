@@ -27,9 +27,6 @@ jobs:
     - name: Publish
       run: dotnet publish --configuration Release
     - run: ls ${{ github.workspace }}/hello-world-demo/bin/Release/net6.0/publish/
-    - name: Image Name and Tag
-      run: echo "image-name=hello-world-demo:$GITHUB_SHA"
-      id: image
     - name: Docker Build
       uses: docker/build-push-action@v5
       with:
@@ -41,18 +38,17 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/bin
         curl -o $GITHUB_WORKSPACE/bin/kustomize_v5.4.1_linux_amd64.tar.gz --location "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.1/kustomize_v5.4.1_linux_amd64.tar.gz"
         tar -xvzf $GITHUB_WORKSPACE/bin/kustomize_v5.4.1_linux_amd64.tar.gz
-        ls -l
         chmod u+x $GITHUB_WORKSPACE/kustomize
     - name: Check out manifest
       uses: actions/checkout@v3
       with:
-        repository: motmot84/deployment-manifest-demo
+        repository: motmot84/deployment-manifest
         ref: main
         token: ${{ secrets.GH_PAT }}
     - name: Update Manifest Image Tag
       run: |
         ls -l
-        cd hello-world-demo/env/test
+        cd env/test
         kustomize edit set image hello-world-demo:${{ github.sha }}
         git config user.name motmot84
         git config user.email motmot84@yahoo.com

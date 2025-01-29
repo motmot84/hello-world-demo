@@ -1,0 +1,44 @@
+name: Test Powershell
+on:
+  workflow_dispatch:
+
+jobs:
+  powershell-jobs:
+    name: Powershell Jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Script
+        shell: pwsh
+        run: |
+          # Initialize an array to hold the job objects
+          $jobs = @()
+          
+          # Define the commands you want to run asynchronously
+          $commands = @(
+              { Start-Sleep -Seconds 3; "Task 1 complete" },
+              { Start-Sleep -Seconds 10; "Task 2 complete" },
+              { Start-Sleep -Seconds 2; "Task 3 complete" }
+          )
+          
+          # Start each command as a background job and add it to the jobs array
+          foreach ($command in $commands) {
+              $job = Start-Job -ScriptBlock $command
+              $jobs += $job
+          }
+                    
+          #Wait for all jobs to complete
+          while ($jobs.State -ne 'Completed') {
+              Clear   
+              Write-Output $jobs | Format-Table 
+              Start-Sleep -Seconds 1
+          }
+          
+          # Retrieve and display the results from each job
+          foreach ($job in $jobs) {
+              $result = Receive-Job -Job $job -Wait
+              Write-Host $result
+              $status = Get-Job -Name $job.Name
+          }
+          
+          # Clean up the jobs
+          $jobs | Remove-Job
